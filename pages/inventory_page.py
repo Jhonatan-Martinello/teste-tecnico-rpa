@@ -13,6 +13,11 @@ class InventoryPage:
     CART_BUTTON = "add-to-cart-" # padrão inicial do nome do botão, será concatenado com o nome do produto
 
     
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
+
+
     def _get_add_to_cart_button_id(self, product_name):
         return (
             self.CART_BUTTON
@@ -20,14 +25,13 @@ class InventoryPage:
                 .replace(" ", "-")
                 .replace(".", "")
         )
-    
-    
-    def __init__(self, driver):
-        self.driver = driver
-        self.wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
 
 
-    def add_product(self, product_name):
+    def add_product(
+            self, 
+            product_name,
+            product_quantity
+        ):
         products = self.wait.until(
             EC.presence_of_all_elements_located(
                 (By.CLASS_NAME, self.INVENTORY_ITEM_DIV)
@@ -52,6 +56,7 @@ class InventoryPage:
 
                     return {
                         "produto": product_name,
+                        "quantidade": product_quantity,
                         "sucesso": True,
                         "mensagem": "Produto adicionado ao carrinho"
                     }
@@ -60,12 +65,14 @@ class InventoryPage:
                      
                      return {
                         "produto": product_name,
+                        "quantidade": product_quantity,
                         "sucesso": False,
                         "mensagem": "Produto não encontrado"
                     }
             
         return {
             "produto": product_name,
+            "quantidade": product_quantity,
             "sucesso": False,
             "mensagem": "Produto não encontrado"
         }

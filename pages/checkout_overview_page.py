@@ -20,6 +20,19 @@ class CheckoutOverviewPage:
         self.wait = WebDriverWait(driver, DEFAULT_TIMEOUT)
 
 
+    def _convert_money(self, value): # converte por exemplo: '$29.99' para: 29.99
+        value = (
+            value
+            .replace("$", "")
+            .replace("Item total:", "")
+            .replace("Tax:", "")
+            .replace("Total:", "")
+            .strip()
+        )
+
+        return float(value)
+
+
     def get_item_prices(self):
 
         prices = self.wait.until(
@@ -33,95 +46,56 @@ class CheckoutOverviewPage:
 
 
     def get_subtotal(self):
-
         subtotal = self.wait.until(
             EC.visibility_of_element_located((By.CLASS_NAME, self.SUBTOTAL))
         )
 
-        return self._convert_money(
-            subtotal.text
-        )
+        return self._convert_money(subtotal.text)
 
 
     def get_tax(self):
-
         tax = self.wait.until(
             EC.visibility_of_element_located((By.CLASS_NAME, self.TAX))
         )
 
-        return self._convert_money(
-            tax.text
-        )
+        return self._convert_money(tax.text)
 
 
     def get_total(self):
-
         total = self.wait.until(
             EC.visibility_of_element_located((By.CLASS_NAME, self.TOTAL))
         )
 
-        return self._convert_money(
-            total.text
-        )
+        return self._convert_money(total.text)
 
 
     def calculate_expected_subtotal(self):
-
         prices = self.get_item_prices()
 
         return round(sum(prices), 2)
 
 
-    def validate_subtotal(self):
-
-        expected = self.calculate_expected_subtotal()
-        displayed = self.get_subtotal()
-
-        return expected == displayed
-
-
-    def validate_total(self):
-
-        subtotal = self.get_subtotal()
-        tax = self.get_tax()
-        total = self.get_total()
-
-        expected_total = round(
-            subtotal + tax,
-            2
-        )
-
-        return expected_total == total
-
-
     def validate_checkout(self):
+        expected_subtotal = self.calculate_expected_subtotal()
+        displayed_subtotal = self.get_subtotal()
+        expected_total = round(expected_subtotal + self.get_tax(), 2)
+        displayed_total = self.get_total()
+        subtotal_valid = expected_subtotal == displayed_subtotal
+        total_valid = expected_total == displayed_total
 
         return {
-            "subtotal_valid": self.validate_subtotal(),
-            "total_valid": self.validate_total()
+            "expected_subtotal": expected_subtotal,
+            "displayed_subtotal": displayed_subtotal,
+            "expected_total": expected_total,
+            "displayed_total": displayed_total,
+            "subtotal_valid": subtotal_valid,
+            "total_valid": total_valid
         }
 
 
     def finish_purchase(self):
-
         button = self.wait.until(
             EC.element_to_be_clickable((By.ID, self.FINISH_BUTTON))
         )
 
         button.click()
-
-
-    def _convert_money(self, value):
-
-        # converte: '$29.99' para:29.99
-
-        value = (
-            value
-            .replace("$", "")
-            .replace("Item total:", "")
-            .replace("Tax:", "")
-            .replace("Total:", "")
-            .strip()
-        )
-
-        return float(value)

@@ -8,9 +8,10 @@ def create_driver():
     options = webdriver.ChromeOptions()
 
     # modo de execução sem abrir o navegador
-    # options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
     
     # impedir que o alert de senha interrompa a execução (com navegador ativo)
+    """ 
     options.add_argument("--incognito")
     options.add_experimental_option(
         "prefs",
@@ -19,6 +20,7 @@ def create_driver():
             "profile.password_manager_enabled": False
         }
     )
+    """
 
     driver = webdriver.Chrome(
         service=Service(ChromeDriverManager().install()),

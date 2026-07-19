@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from config import DEFAULT_TIMEOUT, PERSONAL_FISRT_NAME, PERSONAL_LAST_NAME, PERSONAL_POSTAL_CODE
+from config import DEFAULT_TIMEOUT, PERSONAL_FIRST_NAME, PERSONAL_LAST_NAME, PERSONAL_POSTAL_CODE
 
 
 class CheckoutPage:
@@ -42,7 +42,7 @@ class CheckoutPage:
         )
 
         first_name.clear()
-        first_name.send_keys(PERSONAL_FISRT_NAME)
+        first_name.send_keys(PERSONAL_FIRST_NAME)
 
         last_name.clear()
         last_name.send_keys(PERSONAL_LAST_NAME)

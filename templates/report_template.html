@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+   <head>
+      <meta charset="UTF-8">
+      <title>Relatório de Execução</title>
+      <style>
+         body{
+         font-family: Arial;
+         margin:40px;
+         background:#f5f5f5;
+         }
+         .card{
+         background:white;
+         padding:20px;
+         margin-bottom:20px;
+         border-radius:8px;
+         box-shadow:0px 0px 10px #ddd;
+         }
+         table{
+         width:100%;
+         border-collapse:collapse;
+         }
+         th,td{
+         border:1px solid #ccc;
+         padding:8px;
+         }
+         th{
+         background:#2c3e50;
+         color:white;
+         }
+         .success{
+         color:green;
+         }
+         .error{
+         color:red;
+         }
+      </style>
+   </head>
+   <body>
+      <h1>Relatório de Execução</h1>
+      <div class="card">
+         <p><b>Data:</b> {{TIMESTAMP}}</p>
+      </div>
+      <div class="card">
+         <h2>Produtos processados</h2>
+         {{SUCCESS_TABLE}}
+      </div>
+      <div class="card">
+         <h2>Produtos com falha</h2>
+         {{FAILED_TABLE}}
+      </div>
+      <div class="card">
+         <h2>Validação do Checkout</h2>
+         {{CHECKOUT}}
+      </div>
+      <div class="card">
+         <h2>Pedido</h2>
+         <p>{{CONFIRMATION_MESSAGE}}</p>
+         <p>Número do pedido: {{ORDER_NUMBER}}</p>
+      </div>
+      <div class="card">
+         <h2>Resumo</h2>
+         {{SUMMARY}}
+      </div>
+   </body>
+</html>
